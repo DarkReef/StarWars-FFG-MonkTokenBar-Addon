@@ -59,7 +59,10 @@ class StarWarsRolls extends BaseRolls {
             // Native RollFFG.total is 0. A deterministic core Roll survives
             // TokenBar's websocket and Roll.fromData without rerolling any die.
             const total = result.success - result.failure;
-            const summary = await new Roll(String(total), {}, { starwarsffgTokenbar: result }).evaluate({ allowInteractive: false });
+            const summary = await new Roll(String(total), {}, {
+                starwarsffgTokenbar: result,
+                starwarsffgCheck: roll.options.starwarsffgCheck
+            }).evaluate({ allowInteractive: false });
             return await callback(summary);
         } catch (error) {
             ui.notifications.warn(error.message);

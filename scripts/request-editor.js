@@ -21,9 +21,9 @@ function element(tag, cls, text) {
     return node;
 }
 
-function die(code) {
+export function die(code, ownerDocument = document) {
     const [filename, title] = dice[code];
-    const img = element("img");
+    const img = ownerDocument.createElement("img");
     img.src = foundry.utils.getRoute("systems/starwarsffg/images/dice/starwars/" + filename);
     img.alt = label(title);
     img.title = img.alt;

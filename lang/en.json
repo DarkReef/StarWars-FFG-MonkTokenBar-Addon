@@ -1,5 +1,62 @@
 {
   "SWFFGMTB": {
+    "GMDecision": "GM adjudication",
+    "MarkTargetMet": "Mark target as met",
+    "MarkTargetMissed": "Mark target as missed",
+    "AssignedDifficulty": "Assigned difficulty",
+    "AwaitingRoll": "Awaiting roll",
+    "PrivateResult": "Result hidden",
+    "AwaitingReveal": "Awaiting reveal",
+    "RevealResult": "Reveal",
+    "UnavailableResult": "Result unavailable",
+    "CheckSucceeded": "Success",
+    "CheckFailed": "Failure",
+    "ContestWon": "Won the contest",
+    "ContestLost": "Lost the contest",
+    "ContestTied": "Tied",
+    "FinalPool": "Final pool",
+    "FlatSymbols": "Automatic symbols",
+    "ThresholdMet": "Target of {n} net successes met",
+    "ThresholdMissed": "Target of {n} net successes missed",
+    "MarkedPassed": "GM marked as passed",
+    "MarkedFailed": "GM marked as failed",
+    "MarkPassed": "Mark as passed",
+    "MarkFailed": "Mark as failed",
+    "MarkWinner": "Select winner",
+    "ResultCounts": {
+      "success": {
+        "one": "{n} success",
+        "other": "{n} successes"
+      },
+      "failure": {
+        "one": "{n} failure",
+        "other": "{n} failures"
+      },
+      "advantage": {
+        "one": "{n} advantage",
+        "other": "{n} advantages"
+      },
+      "threat": {
+        "one": "{n} threat",
+        "other": "{n} threats"
+      },
+      "triumph": {
+        "one": "{n} triumph",
+        "other": "{n} triumphs"
+      },
+      "despair": {
+        "one": "{n} despair",
+        "other": "{n} despairs"
+      },
+      "light": {
+        "one": "{n} light side point",
+        "other": "{n} light side points"
+      },
+      "dark": {
+        "one": "{n} dark side point",
+        "other": "{n} dark side points"
+      }
+    },
     "Skills": "Skills",
     "Difficulty": "Difficulty",
     "SelectedSkill": "Skill",

@@ -24,7 +24,10 @@ test("the installed setup hook connects both card types to one narrative roll an
         globalThis.canvas = { tokens: { placeables: [] } };
         globalThis.CONFIG = { FFG: { skills: actor.system.skills } };
         globalThis.game = { system: { id: "starwarsffg" }, actors: { contents: [actor] }, i18n: { lang: "en", localize: key => key } };
-        globalThis.game.ffg = { RollFFG: class { async evaluate() { rolls++; return { total: 0, ffg }; } } };
+        globalThis.game.ffg = { RollFFG: class {
+            constructor(_formula, _data, options) { this.options = options; }
+            async evaluate() { rolls++; this.total = 0; this.ffg = ffg; return this; }
+        } };
         globalThis.DicePoolFFG = class { upgrade() {} renderDiceExpression() { return "2dp+1da+2di"; } };
         globalThis.Roll = class {
             constructor(formula, data, options) { this.total = Number(formula); this.options = options; }
@@ -44,6 +47,9 @@ test("the installed setup hook connects both card types to one narrative roll an
         assert.equal(rolls, 1);
         assert.equal(response.roll.total, -1);
         assert.deepEqual(JSON.parse(JSON.stringify(response.roll)).options.starwarsffgTokenbar, ffg);
+        assert.deepEqual(JSON.parse(JSON.stringify(response.roll)).options.starwarsffgCheck.pool, {
+            ability: 1, proficiency: 2, difficulty: 2, challenge: 0, boost: 0, setback: 0, force: 0
+        });
     } finally {
         registered.deregister();
         for (const [key, value] of previous) {
