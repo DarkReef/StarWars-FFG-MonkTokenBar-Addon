@@ -2,7 +2,7 @@
   "id": "starwars-ffg-monktokenbar-addon",
   "title": "Star Wars FFG · Monk's TokenBar",
   "description": "Request Star Wars FFG skill checks and compare narrative dice results in Monk's TokenBar.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "authors": [{ "name": "DarkReef" }],
   "compatibility": { "minimum": "14", "verified": "14", "maximum": "14" },
   "relationships": {
@@ -10,6 +10,7 @@
     "requires": [{ "id": "monks-tokenbar", "type": "module", "compatibility": { "minimum": "14.01" } }]
   },
   "esmodules": ["scripts/main.js"],
+  "styles": ["styles/request-editor.css"],
   "languages": [
     { "lang": "en", "name": "English", "path": "lang/en.json" },
     { "lang": "ru", "name": "Русский", "path": "lang/ru.json" }

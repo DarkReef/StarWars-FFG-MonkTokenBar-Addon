@@ -28,28 +28,12 @@ export function configureRequest(data) {
     const skills = requests.filter(request => request.type === "skill");
     if (!skills.length) return;
     const difficulty = data.options?.ffgDifficulty ?? DEFAULT_DIFFICULTY;
-    for (const request of skills) request.ffgDifficulty = difficulty;
+    for (const request of skills) {
+        request.ffgDifficulty = difficulty;
+        request.ffgModifiers = { ...data.options?.ffgModifiers };
+    }
     if (data.what === "savingthrow" && requests.length === skills.length && (data.dc == null || data.dc === "")) {
         data.dc = 1;
     }
 }
 
-export function addDifficultyControl(app, html) {
-    const header = html.querySelector(".sheet-header");
-    if (!header || header.querySelector("[data-ffg-difficulty]")) return;
-    const container = document.createElement("div");
-    container.className = "form-group";
-    container.dataset.ffgDifficulty = "";
-    const label = document.createElement("label");
-    const select = document.createElement("select");
-    select.id = app.id + "-ffg-difficulty";
-    label.htmlFor = select.id;
-    label.textContent = game.i18n.localize("SWFFGMTB.Difficulty");
-    for (let count = 0; count <= 5; count++) {
-        select.add(new Option(game.i18n.localize("SWFFGMTB.Difficulty" + count), String(count)));
-    }
-    select.value = String(app.opts.ffgDifficulty ?? DEFAULT_DIFFICULTY);
-    select.addEventListener("change", () => { app.opts.ffgDifficulty = Number(select.value); });
-    container.append(label, select);
-    header.prepend(container);
-}

@@ -40,7 +40,7 @@ test("the installed setup hook connects both card types to one narrative roll an
         assert.equal(callbacks.get("monks-tokenbar.requestContested"), callbacks.get("monks-tokenbar.requestRoll"));
         assert.equal(adapter.contestedoptions[0].groups["piloting%3a%20space"], "Piloting");
         const request = { type: "skill", key: "piloting%3a%20space", ffgDifficulty: 2 };
-        const response = await adapter.roll({ id: "tokenA", actor, request }, async roll => ({ id: "tokenA", roll }));
+        const response = await adapter.roll({ id: "tokenA", actor, request, fastForward: true }, async roll => ({ id: "tokenA", roll }));
         assert.equal(rolls, 1);
         assert.equal(response.roll.total, -1);
         assert.deepEqual(JSON.parse(JSON.stringify(response.roll)).options.starwarsffgTokenbar, ffg);

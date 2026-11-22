@@ -1,7 +1,8 @@
 import { MonksTokenBar } from "../../monks-tokenbar/monks-tokenbar.js";
 import { BaseRolls } from "../../monks-tokenbar/systems/base-rolls.js";
 import { getNarrativeResult, getSkillOptions, rollSkill } from "./ffg-roll.js";
-import { addDifficultyControl, configureRequest, difficultyValue, findActorSkill, skillKey } from "./requests.js";
+import { configureRequest, difficultyValue, findActorSkill, skillKey } from "./requests.js";
+import { renderRequestEditor } from "./request-editor.js";
 import { renderResults } from "./results.js";
 import { includeBlindOwners, normalizeRequestTargets, renderRecipients } from "./recipients.js";
 
@@ -34,14 +35,25 @@ class StarWarsRolls extends BaseRolls {
         return actor.system.skills?.[findActorSkill(actor, key)]?.rank ?? null;
     }
 
-    async roll({ id, actor, request }, callback) {
+    async roll({ id, actor, request, message, fastForward }, callback, event) {
+        if (!game.user?.isGM && actor.isOwner === false) return { id };
+        const target = event?.target;
+        const messageId = message?.id ?? target?.closest?.("[data-message-id]")?.dataset?.messageId;
+        const slot = messageId ? `${messageId}.${id}` : undefined;
+        this.pendingRolls ??= new Set();
+        if (slot && this.pendingRolls.has(slot)) return { id };
+        if (slot) this.pendingRolls.add(slot);
         try {
             const key = findActorSkill(actor, request.key);
             if (request.type !== "skill" || !key) {
                 const available = this.requestoptions[0].groups;
                 throw new Error(game.i18n.format("SWFFGMTB.SkillUnavailable", { actor: actor.name, skill: available[request.key] ?? request.key }));
             }
-            const roll = await rollSkill(actor, key, difficultyValue(request.ffgDifficulty));
+            const prompt = !!target?.nodeType || fastForward !== true;
+            const roll = await rollSkill(actor, key, difficultyValue(request.ffgDifficulty), request.ffgModifiers, { prompt });
+            // Both TokenBar result collectors expect an object per recipient.
+            // Without a roll or error they leave the row available for retry.
+            if (!roll) return { id };
             const result = getNarrativeResult(roll);
             if (!result) throw new Error(game.i18n.localize("SWFFGMTB.NoResult"));
             // Native RollFFG.total is 0. A deterministic core Roll survives
@@ -52,6 +64,8 @@ class StarWarsRolls extends BaseRolls {
         } catch (error) {
             ui.notifications.warn(error.message);
             return { id, error: true, msg: error.message };
+        } finally {
+            if (slot) this.pendingRolls.delete(slot);
         }
     }
 }
@@ -63,7 +77,7 @@ Hooks.once("setup", () => {
     MonksTokenBar.system = new StarWarsRolls();
     Hooks.on("monks-tokenbar.requestRoll", configureRequest);
     Hooks.on("monks-tokenbar.requestContested", configureRequest);
-    Hooks.on("renderSavingThrowApp", addDifficultyControl);
+    Hooks.on("renderSavingThrowApp", renderRequestEditor);
     Hooks.on("renderSavingThrowApp", (app, html) => renderRecipients(app, html, tokens => MonksTokenBar.getTokenEntries(tokens)));
     Hooks.on("preCreateChatMessage", includeBlindOwners);
     Hooks.once("ready", () => {
@@ -74,6 +88,6 @@ Hooks.once("setup", () => {
             return original.call(this, entries, options);
         };
     });
-    Hooks.on("renderContestedRollApp", addDifficultyControl);
+    Hooks.on("renderContestedRollApp", renderRequestEditor);
     Hooks.on("renderChatMessageHTML", renderResults);
 });
