@@ -1,0 +1,25 @@
+{
+  "SWFFGMTB": {
+    "Skills": "Skills",
+    "Difficulty": "Difficulty dice",
+    "Difficulty0": "0 · Simple",
+    "Difficulty1": "1 · Easy",
+    "Difficulty2": "2 · Average",
+    "Difficulty3": "3 · Hard",
+    "Difficulty4": "4 · Daunting",
+    "Difficulty5": "5 · Formidable",
+    "SuccessThreshold": "Successes required",
+    "Success": "Success",
+    "Failure": "Failure",
+    "Advantage": "Advantage",
+    "Threat": "Threat",
+    "Triumph": "Triumph",
+    "Despair": "Despair",
+    "Light": "Light side",
+    "Dark": "Dark side",
+    "NoSymbols": "No uncancelled symbols",
+    "NoResult": "The system returned no narrative dice result.",
+    "SkillUnavailable": "{actor} cannot roll the skill “{skill}”.",
+    "InvalidDifficulty": "Choose a difficulty from 0 to 5."
+  }
+}
