@@ -86,6 +86,8 @@ export async function verifyWorldRequest(rollMode = "selfroll", { contested = fa
     try {
       const cancelled = await openPrompt();
       check(!message.flags["monks-tokenbar"][flag].roll, "The request rolled before confirmation.");
+      // Foundry V14 ApplicationV1 deliberately delays its header-button listeners by 500 ms.
+      await new Promise(resolve => setTimeout(resolve, 550));
       cancelled.querySelector('.window-header .close')?.click();
       await waitFor(() => !cancelled.isConnected, "The native editor did not close.");
       check(!message.flags["monks-tokenbar"][flag].roll, "Closing the editor recorded a roll.");
