@@ -3,6 +3,7 @@ import { BaseRolls } from "../../monks-tokenbar/systems/base-rolls.js";
 import { getNarrativeResult, getSkillOptions, rollSkill } from "./ffg-roll.js";
 import { addDifficultyControl, configureRequest, difficultyValue, findActorSkill, skillKey } from "./requests.js";
 import { renderResults } from "./results.js";
+import { includeBlindOwners, normalizeRequestTargets, renderRecipients } from "./recipients.js";
 
 class StarWarsRolls extends BaseRolls {
     get _supportedSystem() { return true; }
@@ -63,6 +64,16 @@ Hooks.once("setup", () => {
     Hooks.on("monks-tokenbar.requestRoll", configureRequest);
     Hooks.on("monks-tokenbar.requestContested", configureRequest);
     Hooks.on("renderSavingThrowApp", addDifficultyControl);
+    Hooks.on("renderSavingThrowApp", (app, html) => renderRecipients(app, html, tokens => MonksTokenBar.getTokenEntries(tokens)));
+    Hooks.on("preCreateChatMessage", includeBlindOwners);
+    Hooks.once("ready", () => {
+        const api = game.MonksTokenBar;
+        const original = api.requestRoll;
+        api.requestRoll = async function (targets, options) {
+            const entries = await normalizeRequestTargets(targets, uuid => fromUuid(uuid));
+            return original.call(this, entries, options);
+        };
+    });
     Hooks.on("renderContestedRollApp", addDifficultyControl);
     Hooks.on("renderChatMessageHTML", renderResults);
 });

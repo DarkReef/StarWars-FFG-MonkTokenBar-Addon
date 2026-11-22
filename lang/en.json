@@ -20,6 +20,10 @@
     "NoSymbols": "No uncancelled symbols",
     "NoResult": "The system returned no narrative dice result.",
     "SkillUnavailable": "{actor} cannot roll the skill “{skill}”.",
-    "InvalidDifficulty": "Choose a difficulty from 0 to 5."
+    "InvalidDifficulty": "Choose a difficulty from 0 to 5.",
+    "FindActor": "Search actors by name",
+    "AddActor": "Add an actor from the directory…",
+    "MissingRecipient": "Actor or token not found. Select an existing recipient for the check.",
+    "TokenOffCanvas": "Open this token's scene to request its roll."
   }
 }
